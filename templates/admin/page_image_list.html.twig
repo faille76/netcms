@@ -1,0 +1,87 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ page.title }} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+{% block admin_title %}{{ page.title }}{% endblock %}
+
+{% block admin_body %}
+    <h2>{% trans %}admin.page.image.add{% endtrans %}</h2>
+    {% if succeed is defined %}
+    <div class="card text-white bg-success mb-3">
+        <div class="card-body">
+            <h5 class="card-title">{% trans %}admin.page.image.confirm.title{% endtrans %}</h5>
+            <p class="card-text text-white">
+                {{ succeed|trans }}
+            </p>
+        </div>
+    </div>
+    {% elseif errors is defined %}
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{% trans %}admin.page.image.error.title{% endtrans %}</h5>
+                <p class="card-text text-white">
+                <ul>
+                    {% for error in errors %}
+                        <li>{{ error|trans }}</li>
+                    {% endfor %}
+                </ul>
+                </p>
+            </div>
+        </div>
+    {% endif %}
+
+    <form role="form" method="post" action="{{ path('admin_page_image_create.lang', global_path_params|merge({pageId: page.id})) }}" enctype="multipart/form-data">
+        <div class="md-form">
+            <input type="text" name="name" id="name" class="form-control" />
+            <label for="name">{% trans %}admin.page.image.name{% endtrans %}</label>
+        </div>
+
+        <span class="h5">{% trans %}admin.page.image.file{% endtrans %}</span>
+        <div class="md-form form-lg col-lg-3 col-md-6 col-sm-12">
+            <input type="file" name="image" class="dropify" data-height="150" />
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-md">{% trans %}admin.page.image.submit{% endtrans %}</button>
+    </form>
+
+    <h2 class="mt-4">{% trans %}admin.page.image.list{% endtrans %}</h2>
+    {% if images|length == 0 %}
+        {% trans %}admin.page.image.no_image{% endtrans %}
+    {% else %}
+        <div class="row">
+        {% for image in images %}
+            <div class="col-lg-3 col-md-4 col-sm-12 mb-4">
+                <div class="modal fade" id="modal{{ image.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body mb-0 p-0">
+                                <img src="{{ asset('pages/' ~ page.slug ~ '/900/' ~ image.url) }}" alt="{{ image.name }}" />
+                            </div>
+
+                            <div class="modal-footer justify-content-center">
+                                <form action="{{ path('admin_page_image_update.lang', global_path_params|merge({pageId: page.id, imgId: image.id})) }}" role="form" method="post">
+                                    <div class="md-form input-group mb-3">
+                                        <input type="text" class="form-control" name="name" aria-describedby="name" value="{{ image.name }}" />
+                                        <div class="input-group-append">
+                                            <button class="btn btn-md btn-info m-0 px-3" type="submit" id="name">{% trans %}admin.page.image.update{% endtrans %}</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                                <a href="{{ path('admin_page_image_delete.lang', global_path_params|merge({pageId: page.id, imgId: image.id})) }}" class="btn btn-danger btn-rounded btn-md ml-4"><i class="fas fa-times"></i> {% trans %}admin.page.image.delete{% endtrans %}</a>
+
+                                <button type="button" class="btn btn-outline-primary btn-rounded btn-md ml-4" data-dismiss="modal">{% trans %}admin.page.image.close{% endtrans %}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a>
+                    <img class="img-fluid z-depth-1" src="{{ asset('pages/' ~ page.slug ~ '/250/' ~ image.url) }}" alt="{{ image.name }}" data-toggle="modal" data-target="#modal{{ image.id }}">
+                </a>
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+    <p class="text-right">
+        <a href="{{ path('admin_page_list.lang', global_path_params) }}" class="btn btn-primary"><i class="fas fa-arrow-left"></i> {% trans %}admin.page.image.back{% endtrans %}</a>
+    </p>
+{% endblock %}

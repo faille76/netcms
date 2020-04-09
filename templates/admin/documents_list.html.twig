@@ -1,0 +1,43 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{% trans %}admin.documents.list.title{% endtrans %} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+{% block admin_title %}{% trans %}admin.documents.list.title{% endtrans %}{% endblock %}
+
+{% block admin_body %}
+    <p class="text-right">
+        <a href="{{ path('admin_document_create.lang', global_path_params) }}" class="btn btn-primary"><i class="fas fa-upload"></i> {% trans %}admin.documents.list.create{% endtrans %}</a>
+    </p>
+    <table class="table table-sm table-hover">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">{% trans %}admin.documents.list.name{% endtrans %}</th>
+            <th scope="col">{% trans %}admin.documents.list.enable{% endtrans %}</th>
+            <th scope="col">{% trans %}admin.documents.list.actions{% endtrans %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for document in documents %}
+            <tr>
+                <th scope="row">{{ document.id }}</th>
+                <td>{{ document.name }} <a href="{{ asset('upload/' ~ document.fileName) }}" class="text-info" target="_blank"><i class="fas fa-external-link-alt"></i></a></td>
+                <td>
+                    {% if document.enabled %}
+                        <a class="trigger green lighten-1 white-text" href="{{ path('admin_document_enable.lang', global_path_params|merge({documentId: document.id})) }}">
+                            {% trans %}admin.documents.list.enabled{% endtrans %}
+                        </a>
+                    {% else %}
+                        <a class="trigger red lighten-1 white-text" href="{{ path('admin_document_enable.lang', global_path_params|merge({documentId: document.id})) }}">
+                            {% trans %}admin.documents.list.disabled{% endtrans %}
+                        </a>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href='{{ path('admin_document_update.lang', global_path_params|merge({documentId: document.id})) }}'><span class="text-info"><i class="fas fa-edit"></i> {% trans %}admin.documents.list.update{% endtrans %}</span></a><br />
+                    <a href='{{ path('admin_document_delete.lang', global_path_params|merge({documentId: document.id})) }}' onclick="return confirm('{% trans %}admin.documents.list.delete_confirm{% endtrans %}')"><span class="text-danger"><i class="fas fa-times"></i> {% trans %}admin.documents.list.delete{% endtrans %}</span></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

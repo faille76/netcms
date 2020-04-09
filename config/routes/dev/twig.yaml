@@ -1,0 +1,9 @@
+_errors:
+    resource: '@FrameworkBundle/Resources/config/routing/errors.xml'
+    prefix:
+        default: '/_error'
+        lang: /{_locale}/_error
+    requirements:
+        _locale: '%app_locales%'
+    defaults:
+        _locale: '%locale%'

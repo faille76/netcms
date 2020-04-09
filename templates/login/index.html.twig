@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}login.title{% endtrans %} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <section class="wow fadeIn" data-wow-delay="0.3s">
+            <div class="row justify-content-md-center">
+                <div class="col-sm-12 col-lg-6 col-md-auto">
+                    <div class="card">
+                        <h5 class="card-header info-color white-text text-center py-4">
+                            <strong>{% trans %}login.title{% endtrans %}</strong>
+                        </h5>
+
+                        <div class="card-body px-lg-5 pt-0">
+
+                            <form class="text-center" style="color: #757575;" role="form" method="post" action="{{ path('user_login_submit.lang', global_path_params) }}">
+                                {% if message is defined %}<br />{{ message|trans }}{% endif %}
+                                <div class="md-form">
+                                    <input type="text" id="username" name="username" class="form-control" />
+                                    <label for="username">{% trans %}login.username{% endtrans %}</label>
+                                </div>
+
+                                <div class="md-form">
+                                    <input type="password" id="password" name="password" class="form-control" />
+                                    <label for="password">{% trans %}login.password{% endtrans %}</label>
+                                </div>
+
+                                <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit">{% trans %}login.submit{% endtrans %}</button>
+
+                                {% if global.feature.REGISTER %}<p><a href="{{ path('user_register.lang', global_path_params) }}">{% trans %}login.register{% endtrans %}</a></p>{% endif %}
+                                {% if global.feature.LOST_PASSWORD %}<p><a href="/lost">{% trans %}login.forgot_password{% endtrans %}</a></p>{% endif %}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}

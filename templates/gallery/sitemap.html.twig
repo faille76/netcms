@@ -1,0 +1,10 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('home.lang', global_path_params) }}" >{{ global.config.APP_NAME }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('gallery_category_default.lang', global_path_params) }}" >{% trans %}pictures.category.default{% endtrans %}</a></li>
+        {% for category in sitemap %}
+            <li class="breadcrumb-item"><a href="{{ path('gallery_category_by_slug.lang', global_path_params|merge({slug: category.slug})) }}">{{ category.name }}</a></li>
+        {% endfor %}
+        <li class='breadcrumb-item active'>{{ title|default('pictures.category.default'|trans) }}</li>
+    </ol>
+</nav>

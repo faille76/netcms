@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container">
+    {% if articles|length == 0 %}
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">{% trans %}article.default{% endtrans %}</h5>
+                <p class="card-text text-white">
+                    {% trans %}article.no_content{% endtrans %}
+                </p>
+            </div>
+        </div>
+    {% else %}
+        {% for article in articles %}
+            <section class="wow fadeIn" data-wow-delay="0.3s">
+                <div class="row">
+                    {% if article.image is not empty %}
+                        <div class="col-lg-5 col-xl-4">
+                            <div class="overlay">
+                                <img class="img-fluid rounded z-depth-1-half" src="{{ asset('articles/300/' ~ article.image) }}" alt="{{ article.name }}" />
+                                <a href="{{ path('article_by_slug.lang', global_path_params|merge({slug: article.slug})) }}">
+                                    <div class="mask rgba-white-slight"></div>
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="{% if article.image is not empty %}col-lg-7 col-xl-8{% else %}col-12{% endif %}">
+                        <h3 class="font-weight-bold mb-3"><strong><a href='{{ path('article_by_slug.lang', global_path_params|merge({slug: article.slug})) }}'>{{ article.name }}</a></strong></h3>
+                        <p class="dark-grey-text">{% autoescape false %}{{ article.content|striptags|slice(0, 450) }}{% endautoescape %}</p>
+
+                        <p>
+                            <i class="far fa-calendar-alt"></i> <b>{{ article.createdAt|date("Y/m/d")|format_datetime('medium', 'none') }}</b> |
+                            <i class="fas fa-eye"></i> {% trans %}article.views{% endtrans %} <b>{{ article.view }}</b> |
+                            <i class="fas fa-comments"></i> {% trans %}article.comments{% endtrans %} <b>{{ article.commentCount }}</b>
+                            {% if article.author is not null %}| <i class="fas fa-user"></i> {% trans %}article.author{% endtrans %} <b><a href='{{ path('user_profile_information.lang', global_path_params|merge({userId: article.author.userId})) }}'>{{ article.author.firstName }} {{ article.author.lastName }}</a></b>{% endif %}
+                        </p>
+                        <a href="{{ path('article_by_slug.lang', global_path_params|merge({slug: article.slug})) }}" class="btn btn-primary btn-md">{% trans %}article.more{% endtrans %}</a>
+
+                    </div>
+                </div>
+
+                <hr class="my-5">
+            </section>
+        {% endfor %}
+        <section class="wow fadeIn" data-wow-delay="0.3s">
+            <div class="p-2">
+                {% import 'pagination.html.twig' as pagination %}
+                {{ pagination.pagination(page_number, page_cur, 'news_page.lang', global_path_params) }}
+            </div>
+        </section>
+    {% endif %}
+</div>
+{% endblock %}

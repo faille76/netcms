@@ -1,0 +1,17 @@
+<html lang="fr">
+<header>
+    <meta charset="UTF-8" />
+</header>
+{% autoescape false %}
+{{ body }}
+{% endautoescape %}
+
+<br /><br /><br />
+
+<p style='text-align:center'>
+{% for partner in partners %}
+    <a href='{{ partner.url }}' target='_blank' style="margin: 5px;"><img src='{{ asset('partners/150/' ~ partner.image) }}' height='40px' title='{{ partner.name }}' alt='{{ partner.name }}' /></a>
+{% endfor %}
+</p>
+
+</html>

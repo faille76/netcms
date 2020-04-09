@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="mb-3">
+            <ul class="nav blue-gradient py-2 mb-md-0 mb-4 z-depth-1">
+                <li class="nav-item">
+                    <a class="nav-link white-text" href="{{ path('admin_home.lang', global_path_params) }}">
+                        {% trans %}admin.nav.home{% endtrans %}
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle white-text" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        {% trans %}admin.nav.config.title{% endtrans %}
+                    </a>
+                    <div class="dropdown-menu">
+                        {% if is_granted('ROLE_CONFIGURATION') %}<a class="dropdown-item" href="{{ path('admin_config.lang', global_path_params) }}">{% trans %}admin.nav.config.parameters{% endtrans %}</a>{% endif %}
+                        {% if is_granted('ROLE_UPLOAD') %}<a class="dropdown-item" href="{{ path('admin_document_list.lang', global_path_params) }}">{% trans %}admin.nav.config.upload{% endtrans %}</a>{% endif %}
+                    </div>
+                </li>
+
+                {% if global.feature.ARTICLE and is_granted('ROLE_ARTICLES') %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle white-text" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        {% trans %}admin.nav.article.title{% endtrans %}
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{{ path('admin_article_list.lang', global_path_params) }}">{% trans %}admin.nav.article.list{% endtrans %}</a>
+                        <a class="dropdown-item" href="{{ path('admin_article_create.lang', global_path_params) }}">{% trans %}admin.nav.article.create{% endtrans %}</a>
+                    </div>
+                </li>
+                {% endif %}
+
+                {% if is_granted('ROLE_PAGES') %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle white-text" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        {% trans %}admin.nav.page.title{% endtrans %}
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{{ path('admin_page_list.lang', global_path_params) }}">{% trans %}admin.nav.page.list{% endtrans %}</a>
+                        <a class="dropdown-item" href="{{ path('admin_page_create.lang', global_path_params) }}">{% trans %}admin.nav.page.create{% endtrans %}</a>
+                    </div>
+                </li>
+                {% endif %}
+
+                {% if global.feature.GALLERY and is_granted('ROLE_PICTURES') %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle white-text" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        {% trans %}admin.nav.gallery.title{% endtrans %}
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{{ path('admin_gallery_category_list.lang', global_path_params) }}">{% trans %}admin.nav.gallery.cat_list{% endtrans %}</a>
+                        <a class="dropdown-item" href="{{ path('admin_gallery_category_create.lang', global_path_params) }}">{% trans %}admin.nav.gallery.cat_add{% endtrans %}</a>
+                        <a class="dropdown-item" href="{{ path('admin_gallery_album_list.lang', global_path_params) }}">{% trans %}admin.nav.gallery.album_list{% endtrans %}</a>
+                        <a class="dropdown-item" href="{{ path('admin_gallery_album_create.lang', global_path_params) }}">{% trans %}admin.nav.gallery.album_add{% endtrans %}</a>
+                    </div>
+                </li>
+                {% endif %}
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle white-text" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        {% trans %}admin.nav.user.title{% endtrans %}
+                    </a>
+                    <div class="dropdown-menu">
+                        {% if is_granted('ROLE_USERS') %}<a class="dropdown-item" href="{{ path('admin_user_list.lang', global_path_params) }}">{% trans %}admin.nav.user.list{% endtrans %}</a>{% endif %}
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle white-text" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        {% trans %}admin.nav.communicate.title{% endtrans %}
+                    </a>
+                    <div class="dropdown-menu">
+                        {% if global.feature.CONTACT and is_granted('ROLE_CONTACT') %}<a class="dropdown-item" href="{{ path('admin_contact_list.lang', global_path_params) }}">{% trans %}admin.nav.communicate.contact_list{% endtrans %}</a>{% endif %}
+                        {% if global.feature.PARTNER and is_granted('ROLE_PARTNERS') %}<a class="dropdown-item" href="{{ path('admin_partners_list.lang', global_path_params) }}">{% trans %}admin.nav.communicate.partners{% endtrans %}</a>{% endif %}
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <h1>{% block admin_title %}{% trans %}admin.home.title{% endtrans %}{% endblock %}</h1>
+
+        {% block admin_body %}{% endblock %}
+    </div>
+{% endblock %}

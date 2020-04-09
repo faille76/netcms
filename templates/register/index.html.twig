@@ -1,0 +1,142 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}register.title{% endtrans %} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        {% if errors is defined and errors|length > 0 %}
+            <section class="mb-4 pt-5 wow fadeIn" data-wow-delay="0.3s">
+                <div class="card text-white bg-danger mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{% trans %}register.errors.title{% endtrans %}</h5>
+                        <p class="card-text text-white">
+                            <ul>
+                                {% for value in errors %}
+                                    <li>{{ value|trans }}</li>
+                                {% endfor %}
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+            </section>
+        {% endif %}
+
+        <section class="wow fadeIn" data-wow-delay="0.3s">
+            <div class="row justify-content-md-center">
+                <div class="col-sm-12 col-lg-6 col-md-auto">
+                    <div class="card">
+                        <h5 class="card-header info-color white-text text-center py-4">
+                            <strong>{% trans %}register.title{% endtrans %}</strong>
+                        </h5>
+
+                        <div class="card-body px-lg-5 pt-0">
+
+                            <form class="text-center p-2" style="color: #757575;" role="form" method="post" action="{{ path('user_register_submit.lang', global_path_params) }}">
+
+                                <div class="form-row">
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label">{% trans %}register.gender{% endtrans %}</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input type="radio" class="form-check-input" name="gender" id="man" value="1" {%  if post.gender is defined and post.gender == '1' %}checked{% endif %} />
+                                        <label class="form-check-label" for="man">{% trans %}register.men{% endtrans %}</label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input type="radio" class="form-check-input" id="woman" name="gender" value="2" {%  if post.gender is defined and post.gender == '2' %}checked{% endif %} />
+                                        <label class="form-check-label" for="woman">{% trans %}register.women{% endtrans %}</label>
+                                    </div>
+                                </div>
+
+                                <div class="md-form">
+                                    <input type="text" id="username" name="username" class="form-control" {% if post.username is defined %}value="{{ post.username }}"{% endif %} required />
+                                    <label for="username">{% trans %}register.username{% endtrans %}</label>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="md-form">
+                                            <input type="text" id="firstname" name="first_name" {% if post.first_name is defined %}value="{{ post.first_name }}"{% endif %} class="form-control" required />
+                                            <label for="firstname">{% trans %}register.first_name{% endtrans %}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="md-form">
+                                            <input type="text" id="lastname" name="last_name" {% if post.last_name is defined %}value="{{ post.last_name }}"{% endif %} class="form-control" required />
+                                            <label for="lastname">{% trans %}register.last_name{% endtrans %}</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="md-form">
+                                    <input type="email" id="email" name="email" class="form-control" {% if post.email is defined %}value="{{ post.email }}"{% endif %} required />
+                                    <label for="email">{% trans %}register.email{% endtrans %}</label>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="md-form">
+                                            <label>{% trans %}register.birthday{% endtrans %}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <select class="mdb-select md-form" name="birth_day" id="birth_day">
+                                            <option value="" disabled selected>{% trans %}register.day{% endtrans %}</option>
+                                            {% for i in 1..31 %}
+                                                <option value='{{ i }}' {% if post.birth_day is defined and post.birth_day == i %}selected='selected'{% endif %}>{{ i }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <select class="mdb-select md-form" name="birth_month" id="birth_month">
+                                            <option value="" disabled selected>{% trans %}register.month{% endtrans %}</option>
+                                            {% for i in 1..12 %}
+                                                <option value='{{ i }}' {% if post.birth_month is defined and post.birth_month == i %}selected='selected'{% endif %}>{{ i }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <select class="mdb-select md-form" name="birth_year" id="birth_year">
+                                            <option value="" disabled selected>{% trans %}register.year{% endtrans %}</option>
+                                            {% for i in 1950..2010 %}
+                                                <option value='{{ i }}' {% if post.birth_year is defined and post.birth_year == i %}selected='selected'{% endif %}>{{ i }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="md-form">
+                                            <input type="password" id="password" name="password" class="form-control" required />
+                                            <label for="password">{% trans %}register.password{% endtrans %}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="md-form">
+                                            <input type="password" id="password_repeat" name="password_repeat" class="form-control" required />
+                                            <label for="password_repeat">{% trans %}register.repeat_password{% endtrans %}</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" name="newsletter" id="newsletter" {% if post.newsletter is defined and post.newsletter %}checked{% endif %}  />
+                                    <label class="form-check-label" for="newsletter">{% trans %}register.newsletter{% endtrans %}</label>
+                                </div>
+
+                                {% if global.feature.CAPTCHA %}
+                                    <p class="text-center"><div class="g-recaptcha" data-sitekey="{{ global.config.CAPTCHA_CLIENT }}"></div></p>
+                                {% endif %}
+
+                                <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit">{% trans %}register.submit{% endtrans %}</button>
+
+                                <p><i>{% trans %}register.all_fields_mandatory{% endtrans %}</i></p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}

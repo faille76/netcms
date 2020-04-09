@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+
+{% block og_title %}{{ title }} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+{% block og_description %}{{ article.content|striptags|slice(0, 256) }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_image %}{% if article.image is not empty %}{{ asset('articles/600/' ~ article.image) }}{% else %}{{ absolute_url('images/logo.png') }}{% endif %}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <section class="section wow fadeIn">
+            <h1>{{ article.name }}</h1>
+            <p class="text-right">
+                <i class="far fa-calendar-alt"></i> {% trans %}article.created_at{% endtrans %} <b>{{ article.createdAt|date("Y/m/d H:i:s")|format_datetime('full', 'short') }}</b> |
+                <i class="fas fa-eye"></i> {% trans %}article.views{% endtrans %} <b>{{ article.view }}</b>
+                {% if article.author is not null %} | <i class="fas fa-user"></i> {% trans %}article.author{% endtrans %} <b><a href='{{ path('user_profile_information.lang', global_path_params|merge({userId: article.author.userId})) }}'>{{ article.author.lastName }} {{ article.author.firstName }}</a></b>{% endif %}
+            </p>
+
+            {% if article.image is not empty %}
+                <p class="text-center">
+                    <img alt='{{ title }}' class='img-fluid z-depth-1 m-4' src='{{ asset('articles/600/' ~ article.image) }}' />
+                </p>
+            {% endif %}
+            {% autoescape false %}{{ article.content }}{% endautoescape %}
+        </section>
+        {% if global.feature.COMMENT_ARTICLE %}
+            {% include 'comment/comments.html.twig' %}
+        {% endif %}
+    </div>
+{% endblock %}

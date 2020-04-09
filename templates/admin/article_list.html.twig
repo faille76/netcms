@@ -1,0 +1,42 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{% trans %}admin.article.list.title{% endtrans %} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+{% block admin_title %}{% trans %}admin.article.list.title{% endtrans %}{% endblock %}
+
+{% block admin_body %}
+    <p class="text-right">
+        <a href="{{ path('admin_article_create.lang', global_path_params) }}" class="btn btn-primary"><i class="fas fa-plus"></i> {% trans %}admin.article.list.create{% endtrans %}</a>
+    </p>
+    <table class="table table-sm table-hover">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">{% trans %}admin.article.list.name{% endtrans %}</th>
+            <th scope="col">{% trans %}admin.article.list.date{% endtrans %}</th>
+            <th scope="col">{% trans %}admin.article.list.author{% endtrans %}</th>
+            <th scope="col">{% trans %}admin.article.list.actions{% endtrans %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for article in articles %}
+            <tr>
+                <th scope="row">{{ article.id }}</th>
+                <td>{{ article.name }} <a href="{{ path('article_by_slug.lang', global_path_params|merge({slug: article.slug})) }}" class="text-info"><i class="fas fa-external-link-alt"></i></a></td>
+                <td>{{ article.createdAt|date("Y/m/d H:i:s")|format_datetime('medium', 'short') }}</td>
+                <td>{% if article.author is not null %}<a href='{{ path('user_profile_information.lang', global_path_params|merge({userId: article.author.userId})) }}'>{{ article.author.firstName|capitalize }} {{ article.author.lastName|upper }}</a>{% else %}-{% endif %}</td>
+                <td>
+                    <a href='{{ path('admin_article_update.lang', global_path_params|merge({articleId: article.id})) }}'><span class="text-info"><i class="fas fa-edit"></i> {% trans %}admin.article.list.update{% endtrans %}</span></a><br />
+                    <a href='{{ path('admin_article_delete.lang', global_path_params|merge({articleId: article.id})) }}' onclick="return confirm('{% trans %}admin.article.list.delete_confirm{% endtrans %}')"><span class="text-danger"><i class="fas fa-times"></i> {% trans %}admin.article.list.delete{% endtrans %}</span></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <section class="wow fadeIn" data-wow-delay="0.3s">
+        <div class="p-2">
+            {% import 'pagination.html.twig' as pagination %}
+            {{ pagination.pagination(page_number, page_cur, 'admin_article_page_list.lang', global_path_params) }}
+        </div>
+    </section>
+{% endblock %}

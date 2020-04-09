@@ -1,0 +1,114 @@
+<header>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark primary-color scrolling-navbar">
+        <a class="navbar-brand" href="{{ path('home.lang', global_path_params) }}">{{ global.config.APP_NAME }}</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#toggleNav"
+                aria-controls="toggleNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="toggleNav">
+
+            <ul class="navbar-nav mr-auto">
+                <li class='nav-item'><a href='{{ path('home.lang', global_path_params) }}' class='nav-link'><i class='fas fa-home'></i> {% trans %}core.nav.home{% endtrans %}</a></li>
+
+                {% for item in global.navbar(locale) %}
+                    {% if item.sub == true %}
+                    <li class='nav-item {% if page_name is defined and item.page_name == page_name %}active{% endif %} dropdown'>
+                        <a href='{{ path('page_by_slug.lang', global_path_params|merge({pageName: item.page_name})) }}' class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ item.name }}</a>
+                        <div class='dropdown-menu dropdown-primary' aria-labelledby='navbarDropdownMenuLink'>
+                            {% for item1 in item.sub_page %}
+                                <a href='{{ path('page_sub_by_slug.lang', global_path_params|merge({pageName: item.page_name, pageName2: item1.page_name})) }}' class='dropdown-item'>{{ item1.name }}</a>
+                                {% if item1.sub == true %}
+                                    {% for item2 in item1.sub_page %}
+                                        <a href='{{ path('page_sub_sub_by_slug.lang', global_path_params|merge({pageName: item.page_name, pageName2: item1.page_name, pageName3: item2.page_name})) }}' class='dropdown-item'>- {{ item2.name }}</a>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </li>
+                    {% else %}
+                        <li class='nav-item {% if page_name is defined and item.page_name == page_name %}active{% endif %}'>
+                            <a href='{{ path('page_by_slug.lang', global_path_params|merge({pageName: item.page_name})) }}' class='nav-link'>{{ item.name }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if global.feature.GALLERY %}<li class='nav-item'><a href='{{ path('gallery_category_default.lang', global_path_params) }}' class='nav-link'><i class='fas fa-images'></i> {% trans %}core.nav.pictures{% endtrans %}</a></li>{% endif %}
+                {% if global.feature.PARTNER %}<li class='nav-item'><a href='{{ path('partners.lang', global_path_params) }}' class='nav-link'><i class='fas fa-globe'></i> {% trans %}core.nav.partners{% endtrans %}</a></li>{% endif %}
+                {% if global.feature.DOCUMENT %}<li class='nav-item'><a href='{{ path('documents.lang', global_path_params) }}' class='nav-link'><i class='fas fa-cloud-download-alt'></i> {% trans %}core.nav.documents{% endtrans %}</a></li>{% endif %}
+                {% if global.feature.CONTACT %}<li class='nav-item'><a href='{{ path('contact.lang', global_path_params) }}' class='nav-link'><i class='fas fa-envelope'></i> {% trans %}core.nav.contact{% endtrans %}</a></li>{% endif %}
+                {% if is_granted('ROLE_ADMIN') %}<li class='nav-item'><a href='{{ path('admin_home.lang', global_path_params) }}' class='nav-link'>{% trans %}core.nav.administration{% endtrans %}</a></li>{% endif %}
+
+                {% if global.feature.SEARCH %}
+                    <form class="form-inline" method="post" action="{{ path('search_post.lang', global_path_params) }}">
+                        <div class="md-form my-0">
+                            <input class="form-control mr-sm-2" name="keys" id="keys" type="text" placeholder="{% trans %}core.nav.search.keys{% endtrans %}" aria-label="{% trans %}core.nav.search.submit{% endtrans %}" />
+                        </div>
+                    </form>
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                {% if not is_granted('ROLE_USER') %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('user_login.lang', global_path_params) }}"><i class="fas fa-user"></i> {% trans %}core.nav.userspace{% endtrans %}</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item avatar dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="{% if app.user.avatar is not null %}{{ asset('avatars/300/' ~ app.user.avatar) }}{% else %}{{ asset('images/no_avatar.png') }}{% endif %}" class="rounded-circle z-depth-0" alt="{{ app.user.firstName }}" /> {{ app.user.firstName }} {{ app.user.lastName }}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right dropdown-secondary" aria-labelledby="navbarDropdownMenuLink-5">
+                            {% if global.feature.PROFILE_UPDATE %}<a href='{{ path('user_profile.lang', global_path_params) }}' class="dropdown-item"><i class="fas fa-user"></i> {% trans %}core.nav.profile{% endtrans %}</a><br />{% endif %}
+                            <a href='{{ path('user_logout.lang', global_path_params) }}' class="dropdown-item"><i class="fas fa-sign-out-alt"></i> {% trans %}core.nav.logout{% endtrans %}</a>
+                        </div>
+                    </li>
+                {% endif %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="langChoice" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-globe"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-default" aria-labelledby="langChoice">
+                        <a class="dropdown-item" href="{{ path('home.lang', {_locale: 'fr'}) }}"><img src="{{ asset('images/fr.gif') }}" alt="Français" style="height:20px;" /> {% trans %}core.nav.lang.fr{% endtrans %}</a>
+                        <a class="dropdown-item" href="{{ path('home.lang', {_locale: 'en'}) }}"><img src="{{ asset('images/en.gif') }}" alt="English" style="height:20px;" /> {% trans %}core.nav.lang.en{% endtrans %}</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="view" style="background: url('{{ asset('images/background.jpg') }}') no-repeat center center; background-size: cover;">
+        <div class="mask rgba-gradient"></div>
+        <div class="container h-100 justify-content-center align-items-center">
+            <div class="row flex-center pt-5 mt-3">
+                <div class="col-md-6 text-center text-md-left margins">
+                    <div class="white-text">
+                        <h1 class="h1-responsive font-weight-bold wow fadeInLeft" data-wow-delay="0.3s">{{ global.config.APP_NAME }}</h1>
+                        <hr class="hr-light wow fadeInLeft" data-wow-delay="0.3s">
+                        <h6 class="wow fadeInLeft" data-wow-delay="0.3s">{{ global.config.APP_DESCRIPTION }}</h6>
+                        <br />
+                        {% if global.config.FACEBOOK_PAGE_URL is not empty %}
+                        <a href="{{ global.config.FACEBOOK_PAGE_URL }}" target="_blank" class="btn-floating btn-fb mx-1">
+                            <i class="fab fa-facebook-f"> </i>
+                        </a>
+                        {% endif %}
+                        {% if global.config.TWITTER_PAGE_URL is not empty %}
+                        <a href="{{ global.config.TWITTER_PAGE_URL }}" target="_blank" class="btn-floating btn-tw mx-1">
+                            <i class="fab fa-twitter"> </i>
+                        </a>
+                        {% endif %}
+                        {% if global.config.LINKEDIN_PAGE_URL is not empty %}
+                        <a href="{{ global.config.LINKEDIN_PAGE_URL }}" target="_blank" class="btn-floating btn-li mx-1">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="col-md-6 wow fadeInRight d-flex justify-content-center" data-wow-delay="0.3s">
+                    <img src="{{ asset('images/logo.png') }}" alt="{{ global.config.APP_NAME }}" class="img-responsive" />
+                </div>
+            </div>
+        </div>
+    </section>
+</header>
+<br /><br />

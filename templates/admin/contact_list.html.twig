@@ -1,0 +1,37 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{% trans %}admin.contacts.list.title{% endtrans %} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+{% block admin_title %}{% trans %}admin.contacts.list.title{% endtrans %}{% endblock %}
+
+{% block admin_body %}
+    <p class="text-right">
+        <a href="{{ path('admin_contact_create.lang', global_path_params) }}" class="btn btn-primary"><i class="fas fa-plus"></i> {% trans %}admin.contacts.list.create{% endtrans %}</a>
+    </p>
+    <table class="table table-sm table-hover">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">{% trans %}admin.contacts.list.first_name{% endtrans %}</th>
+            <th scope="col">{% trans %}admin.contacts.list.last_name{% endtrans %}</th>
+            <th scope="col">{% trans %}admin.contacts.list.email{% endtrans %}</th>
+            <th scope="col">{% trans %}admin.contacts.list.role{% endtrans %}</th>
+            <th scope="col">{% trans %}admin.contacts.list.actions{% endtrans %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for contact in contacts %}
+            <tr>
+                <th scope="row">{{ contact.id }}</th>
+                <td>{{ contact.firstName }}</td>
+                <td>{{ contact.lastName }}</td>
+                <td>{{ contact.email }}</td>
+                <td>{{ contact.role }}</td>
+                <td>
+                    <a href='{{ path('admin_contact_update.lang', global_path_params|merge({contactId: contact.id})) }}'><span class="text-info"><i class="fas fa-edit"></i> {% trans %}admin.contacts.list.update{% endtrans %}</span></a><br />
+                    <a href='{{ path('admin_contact_delete.lang', global_path_params|merge({contactId: contact.id})) }}' onclick="return confirm('{% trans %}admin.contacts.list.delete_confirm{% endtrans %}')"><span class="text-danger"><i class="fas fa-times"></i> {% trans %}admin.contacts.list.delete{% endtrans %}</span></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

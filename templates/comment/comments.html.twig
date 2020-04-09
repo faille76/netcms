@@ -1,0 +1,77 @@
+{% if is_granted('ROLE_USER') %}
+    <section class="pb-5 mt-5 wow fadeIn" data-wow-delay="0.3s">
+        <div class="reply-form">
+            <h3 class="text-center my-5 h3 pt-3">{% trans %}comment.write.title{% endtrans %}</h3>
+
+            <form action="" method='post'>
+                <div class="row text-center text-md-left">
+                    <div class="col-sm-2 col-12 mb-md-0 mt-4">
+                        <img src="{% if app.user.avatar is not null %}{{ asset('avatars/300/' ~ app.user.avatar) }}{% else %}{{ asset('images/no_avatar.png') }}{% endif %}" alt="{{ app.user.firstName }} {{ app.user.lastName }}" class="img-fluid avatar rounded-circle z-depth-2" />
+                    </div>
+
+                    <div class="col-sm-10 col-12">
+                        <div class="md-form">
+                            <textarea type="text" name="message" id="form-mess" class="md-textarea form-control" rows="3"></textarea>
+                            <label for="form-mess">{% trans %}comment.write.message{% endtrans %}</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 text-center mt-4">
+                        <button class="btn btn-pink btn-rounded" type="submit">{% trans %}comment.write.submit{% endtrans %}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+{% else %}
+    <section class="pb-5 mt-5 wow fadeIn" data-wow-delay="0.3s">
+        <div class="reply-form">
+            <h3 class="text-center my-5 h3 pt-3">{% trans %}comment.write.title{% endtrans %}</h3>
+
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans %}comment.write.login.title{% endtrans %}</h5>
+                    <p class="card-text text-white">
+                        {% trans %}comment.write.login.message{% endtrans %}<br />
+                        <a href="{{ path('user_login.lang', global_path_params) }}">{% trans %}comment.write.login.login_now{% endtrans %}</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endif %}
+
+{% if comments|length > 0 %}
+    <section class="mb-4 pt-5 wow fadeIn" data-wow-delay="0.3s">
+        <div class="comments-list text-center text-md-left mb-5">
+            <div class="text-center mb-4">
+                <h3 class="font-weight-bold pt-3 mb-5">{% trans %}comment.read.title{% endtrans %} <span class="badge pink">{{ comments|length }}</span></h3>
+            </div>
+
+            {% for comment in comments %}
+                <div class="row mb-4">
+                    <div class="col-sm-2 col-12 mb-md-0 mb-3">
+                        <img src="{% if comment.author.avatar is not null %}{{ asset('avatars/300/' ~ comment.author.avatar) }}{% else %}{{ asset('images/no_avatar.png') }}{% endif %}" alt="{{ comment.author.lastName }} {{ comment.author.firstName }}" class="avatar rounded-circle z-depth-1-half" />
+                    </div>
+
+                    <div class="col-sm-10 col-12">
+                        <a href='{{ path('user_profile_information.lang', global_path_params|merge({userId: comment.author.userId})) }}'><h4 class="font-weight-bold">{{ comment.author.lastName }} {{ comment.author.firstName }}</h4></a>
+                        <div class="mt-2">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <i class="fas fa-clock"></i> {{ comment.createdAt|date("Y/m/d H:i:s")|format_datetime('medium', 'short') }}
+                                    {% if is_granted('ROLE_COMMENTS') or (app.user is not null and comment.author.userId == app.user.id) %}
+                                        <a href="{{ path('comment_delete.lang', global_path_params|merge({commentId: comment.id})) }}"><i class="fas fa-times text-danger"></i></a>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        </div>
+                        <p class="grey-text">
+                            {{ comment.content }}
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endif %}

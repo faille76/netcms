@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-md-7">
+
+                <section class="wow fadeIn" data-wow-delay="0.3s">
+                    <div class="card m-3">
+                        <div class="card-body">
+                            <h4 class="card-title"><a href='{{ path('news.lang', global_path_params) }}'>{% trans %}home.articles.title{% endtrans %}</a></h4>
+                            <p class="card-text text-center">
+                                <table class="table table-striped">
+                                    {% for article in articles %}
+                                    <tr>
+                                        <td>
+                                            <h4><a href='{{ path('article_by_slug.lang', global_path_params|merge({slug: article.slug})) }}'>{{ article.name }}</a></h4>
+                                            {% if article.image is not empty %}
+                                                <a href='{{ path('article_by_slug.lang', global_path_params|merge({slug: article.slug})) }}'><img alt='{{ article.name }}' class="img-thumbnail max-height-100 float-left m-2" style='max-width:250px; max-width:35%;' src='{{ asset('articles/300/' ~ article.image) }}' /></a>
+                                            {% endif %}
+                                            <p>{% autoescape false %}{{ article.content|striptags|slice(0, 200) }}{% endautoescape %}</p>
+
+                                            <p class="text-right mb-1">
+                                                <span class='glyphicon glyphicon-calendar'></span> {% trans %}home.articles.posted_by{% endtrans %} <b>{{ article.createdAt|date("Y/m/d")|format_datetime('medium', 'none') }}</b>
+                                                <br />
+                                                <a href='{{ path('article_by_slug.lang', global_path_params|merge({slug: article.slug})) }}' class='btn btn-default btn-sm'>{% trans %}home.articles.more{% endtrans %}</a>
+                                            </p>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </table>
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+
+                <section class="wow fadeIn" data-wow-delay="0.3s">
+                    <div class="card m-3">
+                        <div class="card-body">
+                            <h4 class="card-title"><a href='{{ path('partners.lang', global_path_params) }}'>{% trans %}home.partners.title{% endtrans %}</a></h4>
+                            <p class="card-text">
+                                <div class="slider autoplay">
+                                    {% for partner in partners %}
+                                        <div class="multiple">
+                                            <a href='{{ partner.url }}' target='_blank'><img class="img-fluid" src="{{ asset('partners/250/' ~ partner.image) }}" alt="{{ partner.name }}" /></a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+
+            <div class="col-md-5">
+
+                <section class="wow fadeIn" data-wow-delay="0.3s">
+                    <div class="card m-3">
+                        <div class="card-body">
+                            <h4 class="card-title"><a href='{{ path('gallery_category_default.lang', global_path_params) }}'>{% trans %}home.albums.title{% endtrans %}</a></h4>
+                            <p class="card-text">
+                            <table class="table table-striped">
+                                <tbody>
+                                {% for album in albums %}
+                                    <tr>
+                                        <td class="w-25"><a href='{{ path('gallery_album_by_slug.lang', global_path_params|merge({slug: album.slug})) }}'><img src='{% if album.pictureCover is not null %}{{ asset(album.relativePath  ~ '/250/'  ~ album.pictureCover.url) }}{% else %}{{ asset('images/picture_cover.jpg') }}{% endif %}' class="img-fluid z-depth-1" style='max-height:50px; max-width:150px;' alt='{{ album.name }}' /></a></td>
+                                        <td class="w-75"><a href='{{ path('gallery_album_by_slug.lang', global_path_params|merge({slug: album.slug})) }}'>{% if album.category is not null %}{{ album.category.name }} &gt;{% endif %}{{ album.name }}</a><br /><i class="far fa-calendar-alt"></i> <b>{{ album.createdAt|date("Y/m/d")|format_datetime('medium', 'none') }}</b></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="wow fadeIn" data-wow-delay="0.3s">
+                    <div class="card m-3">
+                        <div class="card-body">
+                            <h4 class="card-title">{% trans %}home.comments.title{% endtrans %}</h4>
+                            <p class="card-text">
+                            <table class="table table-striped">
+                                <tbody>
+                                {% for comment in comments %}
+                                    <tr>
+                                        <td>
+                                            <a href='{% if comment.type == 1 %}{{ path('article_by_slug.lang', global_path_params|merge({slug: comment.article.slug})) }}{% else %}{{ path('gallery_album_by_slug.lang', global_path_params|merge({slug: comment.article.slug})) }}{% endif %}'>{{ comment.article.name }}</a><br />
+                                            <img src="{% if comment.author.avatar is not null %}{{ asset('avatars/300/' ~ comment.author.avatar) }}{% else %}{{ asset('images/no_avatar.png') }}{% endif %}" style='height:50px; width:50px; float:left; margin-right:5px;' alt='{{ comment.author.lastName }} {{ comment.author.firstName }}' />
+                                            <b>{% trans %}home.comments.by{% endtrans %} <a href='{{ path('user_profile_information.lang', global_path_params|merge({userId: comment.author.userId})) }}'>{{ comment.author.lastName }} {{ comment.author.firstName }}</a> {% trans %}home.comments.on{% endtrans %} {{ comment.createdAt|date("Y/m/d")|format_datetime('short', 'none') }}</b><br />
+                                            {{ comment.content|striptags|slice(0, 100) }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+
+
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

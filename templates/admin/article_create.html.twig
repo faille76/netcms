@@ -1,0 +1,58 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{% trans %}admin.article.create.title{% endtrans %} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+{% block admin_title %}{% trans %}admin.article.create.title{% endtrans %}{% endblock %}
+
+{% block admin_body %}
+    {% if succeed is defined %}
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{% trans %}admin.article.create.confirm.title{% endtrans %}</h5>
+                <p class="card-text text-white">
+                    {{ succeed|trans }}
+                </p>
+            </div>
+        </div>
+    {% else %}
+        {% if errors is defined %}
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{% trans %}admin.article.create.error.title{% endtrans %}</h5>
+                <p class="card-text text-white">
+                    <ul>
+                        {% for error in errors %}
+                            <li>{{ error|trans }}</li>
+                        {% endfor %}
+                    </ul>
+                </p>
+            </div>
+        </div>
+        {% endif %}
+        <form method="post" role='form' enctype="multipart/form-data">
+            <div class="md-form form-lg">
+                <input type="text" id="name" name="name" class="form-control form-control-lg" {% if title is defined %}value="{{ title }}"{% endif %} />
+                <label for="name">{% trans %}admin.article.create.name{% endtrans %}</label>
+            </div>
+
+            <span class="h5">{% trans %}admin.article.create.image{% endtrans %}</span>
+            <div class="md-form form-lg col-lg-3 col-md-6 col-sm-12">
+                <input type="file" name="image" class="dropify" data-height="150" {% if image is defined %}data-default-file="{{ asset('articles/300/' ~ image) }}"{% endif %} />
+            </div>
+
+            <span class="h5">{% trans %}admin.article.create.content{% endtrans %}</span>
+            <div class="md-form">
+                <textarea class="form-control editor_fr" name="text" rows="20" cols="20">
+                    {% if text is defined %}{% autoescape false %}{{ text }}{% endautoescape %}{% endif %}
+                </textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">{% trans %}admin.article.create.submit{% endtrans %}</button>
+        </form>
+
+        <script src="{{ asset('library/ckeditor5/build/ckeditor.js') }}"></script>
+        <script src="{{ asset('library/ckeditor5/build/custom.js') }}"></script>
+    {% endif %}
+    <p class="text-right">
+        <a href="{{ path('admin_article_list.lang', global_path_params) }}" class="btn btn-primary"><i class="fas fa-arrow-left"></i> {% trans %}admin.article.create.back{% endtrans %}</a>
+    </p>
+{% endblock %}

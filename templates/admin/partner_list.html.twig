@@ -1,0 +1,43 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{% trans %}admin.partners.list.title{% endtrans %} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+{% block admin_title %}{% trans %}admin.partners.list.title{% endtrans %}{% endblock %}
+
+{% block admin_body %}
+    <p class="text-right">
+        <a href="{{ path('admin_partner_create.lang', global_path_params) }}" class="btn btn-primary"><i class="fas fa-plus"></i> {% trans %}admin.partners.list.create{% endtrans %}</a>
+    </p>
+    <table class="table table-sm table-hover">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">{% trans %}admin.partners.list.name{% endtrans %}</th>
+            <th scope="col">{% trans %}admin.partners.list.enable{% endtrans %}</th>
+            <th scope="col">{% trans %}admin.partners.list.actions{% endtrans %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for partner in partners %}
+            <tr>
+                <th scope="row">{{ partner.id }}</th>
+                <td>{{ partner.name }}</td>
+                <td>
+                    {% if partner.enabled %}
+                        <a class="trigger green lighten-1 white-text" href="{{ path('admin_partner_enable.lang', global_path_params|merge({partnerId: partner.id})) }}">
+                            {% trans %}admin.partners.list.enabled{% endtrans %}
+                        </a>
+                    {% else %}
+                        <a class="trigger red lighten-1 white-text" href="{{ path('admin_partner_enable.lang', global_path_params|merge({partnerId: partner.id})) }}">
+                            {% trans %}admin.partners.list.disabled{% endtrans %}
+                        </a>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href='{{ path('admin_partner_update.lang', global_path_params|merge({partnerId: partner.id})) }}'><span class="text-info"><i class="fas fa-edit"></i> {% trans %}admin.partners.list.update{% endtrans %}</span></a><br />
+                    <a href='{{ path('admin_partner_delete.lang', global_path_params|merge({partnerId: partner.id})) }}' onclick="return confirm('{% trans %}admin.partners.list.delete_confirm{% endtrans %}')"><span class="text-danger"><i class="fas fa-times"></i> {% trans %}admin.partners.list.delete{% endtrans %}</span></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,115 @@
+html,
+body,
+header,
+.view {
+    height: 350px;
+}
+
+@media (max-width: 740px) {
+    html,
+    body,
+    header,
+    .view {
+        height: 550px;
+    }
+}
+
+@media (min-width: 800px) and (max-width: 1030px) {
+    html,
+    body,
+    header,
+    .view  {
+        height: 550px;
+    }
+}
+
+body > .container {
+    min-height: 39vh;
+}
+
+body > .container-fluid {
+    min-height: 39vh;
+}
+
+.top-nav-collapse {
+    background-color: #4285F4 !important;
+}
+.navbar:not(.top-nav-collapse) {
+    background: transparent !important;
+}
+@media (max-width: 768px) {
+    .navbar:not(.top-nav-collapse) {
+        background: #4285F4 !important;
+    }
+}
+
+.rgba-gradient {
+    background: -moz-linear-gradient(45deg, rgba(42, 27, 161, 0.6), rgba(50, 189, 229, 0.6) 100%);
+    background: -webkit-linear-gradient(45deg, rgba(42, 27, 161, 0.6), rgba(50, 189, 229, 0.6) 100%);
+    background: -webkit-gradient(linear, 45deg, from(rgba(42, 27, 161, 0.6)), to(rgba(50, 189, 229, 0.6)));
+    background: -o-linear-gradient(45deg, rgba(42, 27, 161, 0.6), rgba(50, 189, 229, 0.6) 100%);
+    background: linear-gradient(to 45deg, rgba(42, 27, 161, 0.6), rgba(50, 189, 229, 0.6) 100%);
+}
+@media (max-width: 450px) {
+    .margins {
+        margin-right: 1rem;
+        margin-left: 1rem;
+    }
+}
+
+table {
+    max-width: 100% !important;
+}
+
+.nav-item > a > img {
+    max-height: 30px;
+}
+
+img {
+    max-width: 100% !important;
+}
+
+.max-height-100 {
+    max-height: 100px;
+}
+
+.max-height-150 {
+    max-height: 150px;
+}
+
+.max-height-200 {
+    max-height: 200px;
+}
+
+@media (min-width: 768px) {
+    .carousel-multi-item-2 .col-md-3 {
+        float: left;
+        width: 25%;
+        max-width: 100%;
+    }
+}
+
+.carousel-multi-item-2 .card img {
+    border-radius: 2px;
+}
+
+.trigger {
+    padding: 1px 10px;
+    font-size: 12px;
+    font-weight: 400;
+    border-radius: 10px;
+    background-color: #eee;
+    color: #212121;
+    display: inline-block;
+    margin: 2px 5px;
+}
+
+.hoverable, .trigger {
+    transition: box-shadow 0.55s;
+    box-shadow: 0;
+}
+
+.hoverable:hover, .trigger:hover {
+    transition: box-shadow 0.45s;
+    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}

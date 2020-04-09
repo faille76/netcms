@@ -1,0 +1,66 @@
+{% set locale = app.request.locale|default('fr') %}
+{% set global_path_params = {_locale: locale} %}
+<!DOCTYPE html>
+<html lang="{{ ('lang'|trans) }}">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset={{ global.config.CHARSET }}" />
+        <meta name="description" content="{{ global.config.APP_DESCRIPTION }}" />
+        <meta name="keywords" content="{{ global.config.APP_TAGS }}" />
+        <meta name="author" content="{{ global.config.APP_AUTHOR }}" />
+        <title>{% block title %}{{ global.config.APP_NAME_FULL }}{% endblock %}</title>
+
+        <meta property="og:site_name" content="{{ global.config.APP_NAME_FULL }}" />
+        <meta property="og:locale" content="{{ locale }}" />
+        <meta property="og:title" content="{% block og_title %}{{ global.config.APP_NAME_FULL }}{% endblock %}" />
+        <meta property="og:description" content="{% block og_description %}{{ global.config.APP_DESCRIPTION }}{% endblock %}" />
+        <meta property="og:type" content="{% block og_type %}website{% endblock %}" />
+        <meta property="og:url" content="{{ absolute_url(path(app.request.attributes.get('_route')|default('home') ~ '.lang', app.request.attributes.get('_route_params')|default({}))) }}" />
+        <meta property="og:image" content="{% block og_image %}{{ asset('images/logo.png') }}{% endblock %}" />
+
+        <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}" type="image/x-icon" />
+
+        {% block stylesheets %}
+            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" />
+            <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" />
+            <link href="{{ asset('bootstrap/css/mdb.min.css') }}" rel="stylesheet" />
+            <link href="{{ asset('bootstrap/css/style.css') }}" rel="stylesheet" />
+            <link href="{{ asset('library/dropify/css/dropify.min.css') }}" rel="stylesheet" />
+            <link href="{{ asset('library/slick/slick.css') }}" rel="stylesheet" />
+            <link href="{{ asset('library/lightbox/css/lightbox.css') }}" rel="stylesheet" />
+        {% endblock %}
+
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <script src='https://www.google.com/recaptcha/api.js'></script>
+        {% if global.feature.ANALYTICS %}
+            <script async src="https://www.googletagmanager.com/gtag/js?id={{ global.config.ANALYTICS_TAG }}"></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+
+                gtag('config', '{{ global.config.ANALYTICS_TAG }}');
+            </script>
+        {% endif %}
+    </head>
+    <body>
+        {% include 'nav.html.twig' %}
+
+        {% block body %}{% endblock %}
+
+        {% include 'footer.html.twig' %}
+
+        {% block javascripts %}
+            <script type="text/javascript" src="{{ asset('bootstrap/js/jquery.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bootstrap/js/popper.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bootstrap/js/mdb.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bootstrap/js/addons/datatables.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('library/dropify/js/dropify.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('library/slick/slick.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('library/slick/scripts.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('library/lightbox/js/lightbox.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bootstrap/js/scripts.js') }}"></script>
+        {% endblock %}
+    </body>
+</html>

@@ -1,0 +1,13 @@
+Bonjour {{ contact.lastName }} {{ contact.firstName }}, un utilisateur a envoyé un message depuis le site {{ global.config.APP_NAME }}.<br /><br />
+<strong>Sujet :</strong> {{ subject }}<br /><br />
+<strong>Nom / Prénom :</strong> {{ last_name }} {{ first_name }}<br /><br />
+<strong>Date :</strong> {{ createdAt|date("Y/m/d H:i:s") }}<br /><br />
+<strong>Email :</strong> {{ email }}<br /><br />
+<strong>Message :</strong><br />
+{{ message }}
+
+<br /><br /><br />
+
+<i>Merci de ne pas répondre directement à ce mail, veuillez répondre à l'adresse : <strong>{{ email }}</strong></i><br /><br />
+
+Cordialement,

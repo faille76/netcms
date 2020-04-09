@@ -1,0 +1,55 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{% trans %}admin.gallery.category.create.title{% endtrans %} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+{% block admin_title %}{% trans %}admin.gallery.category.create.title{% endtrans %}{% endblock %}
+
+{% block admin_body %}
+    {% if succeed is defined %}
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{% trans %}admin.gallery.category.create.confirm.title{% endtrans %}</h5>
+                <p class="card-text text-white">
+                    {{ succeed|trans }}
+                </p>
+            </div>
+        </div>
+    {% else %}
+        {% if errors is defined %}
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{% trans %}admin.gallery.category.create.error.title{% endtrans %}</h5>
+                <p class="card-text text-white">
+                    <ul>
+                        {% for error in errors %}
+                            <li>{{ error|trans }}</li>
+                        {% endfor %}
+                    </ul>
+                </p>
+            </div>
+        </div>
+        {% endif %}
+
+        <form method="post" role='form'>
+            {% trans %}admin.gallery.category.create.parent{% endtrans %}
+            <select class="browser-default custom-select" name="parent_id">
+                <option value="0" disabled>{% trans %}admin.gallery.category.create.parent{% endtrans %}</option>
+                <option value="0">{% trans %}admin.gallery.category.create.no_parent{% endtrans %}</option>
+                {% for category_item in category_tree %}
+                    {% if category_id != category_item.id %}
+                        <option value="{{ category_item.id }}" {% if parent_id is defined and category_item.id == parent_id %}selected{% endif %}>{{ category_item.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <br />
+            <div class="md-form form-lg">
+                <input type="text" id="name" name="name" class="form-control form-control-lg" {% if name is defined %}value="{{ name }}"{% endif %} />
+                <label for="name">{% trans %}admin.gallery.category.create.name{% endtrans %}</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">{% trans %}admin.gallery.category.create.submit{% endtrans %}</button>
+        </form>
+    {% endif %}
+    <p class="text-right">
+        <a href="{{ path('admin_gallery_category_list.lang', global_path_params) }}" class="btn btn-primary"><i class="fas fa-arrow-left"></i> {% trans %}admin.gallery.category.create.back{% endtrans %}</a>
+    </p>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}profile.details.title{% endtrans %} {{ user.lastName }} {{ user.firstName }} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+{% block og_title %}{% trans %}profile.details.title{% endtrans %} {{ user.lastName }} {{ user.firstName }} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+
+{% block body %}
+<div class="container">
+    <section class="wow fadeIn" data-wow-delay="0.3s">
+        <div class="card testimonial-card">
+            <div class="card-up indigo lighten-1"></div>
+
+            <div class="avatar mx-auto white">
+                <img src="{% if user.avatar is not null %}{{ asset('avatars/300/' ~ user.avatar) }}{% else %}{{ asset('images/no_avatar.png') }}{% endif %}" class="rounded-circle" alt="{{ user.lastName }} {{ user.firstName }}">
+            </div>
+
+            <div class="card-body">
+                <h4 class="card-title">{{ user.lastName }} {{ user.firstName }}</h4>
+                <hr />
+                <p><b>{% trans %}profile.details.birthday{% endtrans %}</b> {{ user.birthday }}</p>
+                <p><b>{% trans %}profile.details.username{% endtrans %}</b> {{ user.username }}</p>
+                <p><b>{% trans %}profile.details.gender{% endtrans %}</b> {% if user.gender == 'h' %}{% trans %}profile.details.men{% endtrans %}{% else %}{% trans %}profile.details.women{% endtrans %}{% endif %}</p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

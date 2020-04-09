@@ -1,0 +1,130 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}contact.title{% endtrans %} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+
+{% block og_title %}{% trans %}contact.title{% endtrans %} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <section class="wow fadeIn" data-wow-delay="0.3s">
+            <h1>{% trans %}contact.title{% endtrans %}</h1>
+
+            {% if succeed is defined %}
+            <section class="mb-4 wow fadeIn">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{% trans %}contact.post.confirm.title{% endtrans %}</h5>
+                        <p class="card-text text-white">
+                            {{ succeed|trans }}
+                        </p>
+                    </div>
+                </div>
+            </section>
+            {% else %}
+                {% if errors is defined %}
+                <section class="mb-4 wow fadeIn" data-wow-delay="0.3s">
+                    <div class="card text-white bg-danger mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{% trans %}contact.post.error.title{% endtrans %}</h5>
+                            <p class="card-text text-white">
+                            <ul>
+                                {% for value in errors %}
+                                    <li>{{ value|trans }}</li>
+                                {% endfor %}
+                            </ul>
+                            </p>
+                        </div>
+                    </div>
+                </section>
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-md-9 mb-md-0 mb-5">
+                        <form role="form" method="post" action="{{ path('contact_post.lang', global_path_params) }}">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <select class="mdb-select md-form" name="contact_id">
+                                        <option value="" disabled>{% trans %}contact.to{% endtrans %}</option>
+                                        {% for contact in contacts %}
+                                            <option value='{{ contact.id }}' {% if contact_id is defined and contact_id == contact.id %}selected{% endif %}>{{ contact.lastName }} {{ contact.firstName }} - {{ contact.role }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="md-form mb-0">
+                                        <input type="text" id="lastname" name="last_name" class="form-control" {% if last_name is defined %}value="{{ last_name }}"{% endif %} />
+                                        <label for="lastname">{% trans %}contact.last_name{% endtrans %}</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="md-form mb-0">
+                                        <input type="text" id="firstname" name="first_name" class="form-control" {% if first_name is defined %}value="{{ first_name }}"{% endif %} />
+                                        <label for="firstname">{% trans %}contact.first_name{% endtrans %}</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="md-form mb-0">
+                                        <input type="text" id="subject" name="subject" class="form-control" {% if subject is defined %}value="{{ subject }}"{% endif %} />
+                                        <label for="subject">{% trans %}contact.subject{% endtrans %}</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="md-form mb-0">
+                                        <input type="email" id="email" name="email" class="form-control" {% if email is defined %}value="{{ email }}"{% endif %} />
+                                        <label for="email">{% trans %}contact.email{% endtrans %}</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="md-form">
+                                        <textarea id="message" name="message" rows="2" class="form-control md-textarea"> {% if message is defined %}{{ message }}{% endif %}</textarea>
+                                        <label for="message">{% trans %}contact.message{% endtrans %}</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% if global.feature.CAPTCHA %}
+                                <p class="text-center"><div class="g-recaptcha" data-sitekey="{{ global.config.CAPTCHA_CLIENT }}"></div></p>
+                            {% endif %}
+
+                            <div class="text-center text-md-left">
+                                <button type="submit" class="btn btn-primary">{% trans %}contact.submit{% endtrans %}</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-md-3 text-center">
+                        <ul class="list-unstyled mb-0">
+                            {% if global.config.POSTAL_ADDRESS is not empty %}
+                            <li><i class="fas fa-map-marker-alt fa-2x"></i>
+                                <p>{{ global.config.POSTAL_ADDRESS }}</p>
+                            </li>
+                            {% endif %}
+
+                            {% if global.config.PHONE_NUMBER is not empty %}
+                            <li><i class="fas fa-phone mt-4 fa-2x"></i>
+                                <p>{{ global.config.PHONE_NUMBER }}</p>
+                            </li>
+                            {% endif %}
+
+                            {% if global.config.EMAIL_ADDRESS is not empty %}
+                            <li><i class="fas fa-envelope mt-4 fa-2x"></i>
+                                <p>{{ global.config.EMAIL_ADDRESS }}</p>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+        </section>
+    </div>
+{% endblock %}

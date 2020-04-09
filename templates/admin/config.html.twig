@@ -1,0 +1,63 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{% trans %}admin.config.title{% endtrans %}{% endblock %}
+{% block admin_title %}{% trans %}admin.config.title{% endtrans %}{% endblock %}
+
+{% block admin_body %}
+    <h2>{% trans %}admin.config.parameters.title{% endtrans %}</h2>
+
+    <form role="form" method="post">
+        <table class="table table-sm table-hover">
+            <thead>
+            <tr>
+                <th scope="col">{% trans %}admin.config.parameters.name{% endtrans %}</th>
+                <th scope="col">{% trans %}admin.config.parameters.value{% endtrans %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for key, value in parameters %}
+                <tr>
+                    <td>{{ key }}</td>
+                    <td>
+                        <input type="text" name="{{ key }}" value="{{ value }}" class="form-control" />
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <p class="text-center">
+            <button type="submit" class="btn btn-outline-primary btn-rounded waves-effect">{% trans %}admin.config.parameters.submit{% endtrans %}</button>
+        </p>
+    </form>
+
+    <br /><br />
+
+    <h2>{% trans %}admin.config.feature.title{% endtrans %}</h2>
+    <table class="table table-sm table-hover">
+        <thead>
+        <tr>
+            <th scope="col">{% trans %}admin.config.feature.name{% endtrans %}</th>
+            <th scope="col">{% trans %}admin.config.feature.actions{% endtrans %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for key, enabled in global.feature %}
+            <tr>
+                <td>{{ key }}</td>
+                <td>
+                    {% if enabled %}
+                        <a class="trigger green lighten-1 white-text" href="{{ path('admin_config_feature_enable.lang', global_path_params|merge({featureName: key})) }}">
+                            {% trans %}admin.config.feature.enabled{% endtrans %}
+                        </a>
+                    {% else %}
+                        <a class="trigger red lighten-1 white-text" href="{{ path('admin_config_feature_enable.lang', global_path_params|merge({featureName: key})) }}">
+                            {% trans %}admin.config.feature.disabled{% endtrans %}
+                        </a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

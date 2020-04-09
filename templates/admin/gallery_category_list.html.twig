@@ -1,0 +1,45 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{% trans %}admin.gallery.category.list.title{% endtrans %} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+{% block admin_title %}{% trans %}admin.gallery.category.list.title{% endtrans %}{% endblock %}
+
+{% block admin_body %}
+    <p class="text-right">
+        <a href="{{ path('admin_gallery_category_create.lang', global_path_params) }}" class="btn btn-primary"><i class="fas fa-plus"></i> {% trans %}admin.gallery.category.list.create{% endtrans %}</a>
+    </p>
+    <table class="table table-sm table-hover">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">{% trans %}admin.gallery.category.list.name{% endtrans %}</th>
+            <th scope="col">{% trans %}admin.gallery.category.list.parent{% endtrans %}</th>
+            <th scope="col">{% trans %}admin.gallery.category.list.enable{% endtrans %}</th>
+            <th scope="col">{% trans %}admin.gallery.category.list.actions{% endtrans %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for category in categories %}
+            <tr>
+                <th scope="row">{{ category.id }}</th>
+                <td>{{ category.name }} <a href="{{ path('gallery_category_by_slug.lang', global_path_params|merge({slug: category.slug})) }}" class="text-info"><i class="fas fa-external-link-alt"></i></a></td>
+                <td>{{ categoriesNames[category.parentId] }}</td>
+                <td>
+                    {% if category.enabled %}
+                        <a class="trigger green lighten-1 white-text" href="{{ path('admin_gallery_category_enable.lang', global_path_params|merge({categoryId: category.id})) }}">
+                            {% trans %}admin.gallery.category.list.enabled{% endtrans %}
+                        </a>
+                    {% else %}
+                        <a class="trigger red lighten-1 white-text" href="{{ path('admin_gallery_category_enable.lang', global_path_params|merge({categoryId: category.id})) }}">
+                            {% trans %}admin.gallery.category.list.disabled{% endtrans %}
+                        </a>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href='{{ path('admin_gallery_category_update.lang', global_path_params|merge({categoryId: category.id})) }}'><span class="text-info"><i class="fas fa-edit"></i> {% trans %}admin.gallery.category.list.update{% endtrans %}</span></a><br />
+                    <a href='{{ path('admin_gallery_category_delete.lang', global_path_params|merge({categoryId: category.id})) }}' onclick="return confirm('{% trans %}admin.gallery.category.list.delete_confirm{% endtrans %}')"><span class="text-danger"><i class="fas fa-times"></i> {% trans %}admin.gallery.category.list.delete{% endtrans %}</span></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

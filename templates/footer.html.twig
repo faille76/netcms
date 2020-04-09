@@ -1,0 +1,35 @@
+<footer class="page-footer font-small primary-color pt-4 mt-5">
+    <div class="container">
+        <ul class="list-unstyled list-inline text-center">
+            {% if global.config.FACEBOOK_PAGE_URL is not empty %}
+            <li class="list-inline-item">
+                <a href="{{ global.config.FACEBOOK_PAGE_URL }}" target="_blank" class="btn-floating btn-fb mx-1">
+                    <i class="fab fa-facebook-f"> </i>
+                </a>
+            </li>
+            {% endif %}
+            {% if global.config.TWITTER_PAGE_URL is not empty %}
+            <li class="list-inline-item">
+                <a href="{{ global.config.TWITTER_PAGE_URL }}" target="_blank" class="btn-floating btn-tw mx-1">
+                    <i class="fab fa-twitter"> </i>
+                </a>
+            </li>
+            {% endif %}
+            {% if global.config.LINKEDIN_PAGE_URL is not empty %}
+            <li class="list-inline-item">
+                <a href="{{ global.config.LINKEDIN_PAGE_URL }}" target="_blank" class="btn-floating btn-li mx-1">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+        <p class="text-center">
+            {% if global.feature.CONTACT %}<a href='{{ path('contact.lang', global_path_params) }}'>{% trans %}core.footer.contact{% endtrans %}</a> &bull; {% endif %}
+            <a href="{{ path('terms.lang', global_path_params) }}">{% trans %}core.footer.terms{% endtrans %}</a>
+        </p>
+    </div>
+
+    <div class="footer-copyright text-center py-3">&copy; 2013-20 Copyright NetFoxMaking by
+        <a href='https://frederic-oddou.pro/' target="_blank">ODDOU Frédéric (Faille76)</a>
+    </div>
+</footer>

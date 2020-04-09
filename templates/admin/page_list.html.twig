@@ -1,0 +1,46 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{% trans %}admin.page.list.title{% endtrans %} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+{% block admin_title %}{% trans %}admin.page.list.title{% endtrans %}{% endblock %}
+
+{% block admin_body %}
+    <p class="text-right">
+        <a href="{{ path('admin_page_create.lang', global_path_params) }}" class="btn btn-primary"><i class="fas fa-plus"></i> {% trans %}admin.page.list.create{% endtrans %}</a>
+    </p>
+    <table class="table table-sm table-hover">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">{% trans %}admin.page.list.name{% endtrans %}</th>
+            <th scope="col">{% trans %}admin.page.list.parent{% endtrans %}</th>
+            <th scope="col">{% trans %}admin.page.list.enable{% endtrans %}</th>
+            <th scope="col">{% trans %}admin.page.list.actions{% endtrans %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for page in pages %}
+            <tr>
+                <th scope="row">{{ page.id }}</th>
+                <td>{{ page.title }} <a href="{{ path('page_by_slug.lang', global_path_params|merge({pageName: page.slug})) }}" class="text-info"><i class="fas fa-external-link-alt"></i></a></td>
+                <td>{{ pageNames[page.parentId] }}</td>
+                <td>
+                    {% if page.enabled %}
+                        <a class="trigger green lighten-1 white-text" href="{{ path('admin_page_enable.lang', global_path_params|merge({pageId: page.id})) }}">
+                            {% trans %}admin.page.list.enabled{% endtrans %}
+                        </a>
+                    {% else %}
+                        <a class="trigger red lighten-1 white-text" href="{{ path('admin_page_enable.lang', global_path_params|merge({pageId: page.id})) }}">
+                            {% trans %}admin.page.list.disabled{% endtrans %}
+                        </a>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href='{{ path('admin_page_update.lang', global_path_params|merge({pageId: page.id})) }}'><span class="text-info"><i class="fas fa-edit"></i> {% trans %}admin.page.list.update{% endtrans %}</span></a><br />
+                    <a href='{{ path('admin_page_image_list.lang', global_path_params|merge({pageId: page.id})) }}'><span class="text-warning"><i class="fas fa-images"></i> {% trans %}admin.page.list.images{% endtrans %}</span></a><br />
+                    <a href='{{ path('admin_page_delete.lang', global_path_params|merge({pageId: page.id})) }}' onclick="return confirm('{% trans %}admin.page.list.delete_confirm{% endtrans %}')"><span class="text-danger"><i class="fas fa-times"></i> {% trans %}admin.page.list.delete{% endtrans %}</span></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

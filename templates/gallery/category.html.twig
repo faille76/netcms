@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title|default('pictures.category.default'|trans) }} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+{% block og_title %}{{ title|default('pictures.category.default'|trans) }} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        {% if current is not null %}
+            {% include 'gallery/sitemap.html.twig' %}
+        {% endif %}
+
+        {% if categories|length == 0 and albums|length == 0 %}
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans %}pictures.category.default{% endtrans %}</h5>
+                    <p class="card-text text-white">
+                        {% trans %}pictures.category.no_content{% endtrans %}
+                    </p>
+                </div>
+            </div>
+        {% else %}
+            {% if categories|length > 0 %}
+                <section class="wow fadeIn" data-wow-delay="0.3s">
+                    <h1>{% trans %}pictures.category.title{% endtrans %}</h1>
+
+                    <div class="card-columns">
+                        {% for category in categories %}
+                            <div class="card mt-2 mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title"><a href='{{ path('gallery_category_by_slug.lang', global_path_params|merge({slug: category.slug})) }}'><i class="fas fa-folder"></i> {{ category.name }}</a></h5>
+                                    <p class="card-text">
+                                        {% for sub in category.sub %}
+                                            <a href='{{ path('gallery_category_by_slug.lang', global_path_params|merge({slug: sub.slug})) }}'><small><small>&bull; {{ sub.name }}</small></small></a>
+                                        {% endfor %}
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </section>
+            {% endif %}
+
+            {% if albums|length > 0 %}
+                <section class="wow fadeIn" data-wow-delay="0.3s">
+                    <h1>{% trans %}pictures.album.title{% endtrans %}</h1>
+
+                    <div class="row">
+                        {% for album in albums %}
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-2">
+                                <div class="card card-cascade narrower">
+                                    <div class="view-cascade overlay">
+                                        <a href="{{ path('gallery_album_by_slug.lang', global_path_params|merge({slug: album.slug})) }}">
+                                            <img class="card-img-top max-height-150" src="{% if album.pictureCover is not null %}{{ asset(album.relativePath  ~ '/250/'  ~ album.pictureCover.url) }}{% else %}{{ asset('images/picture_cover.jpg') }}{% endif %}" alt="{{ album.name }}" />
+                                            <div class="mask rgba-white-slight"></div>
+                                        </a>
+                                    </div>
+
+                                    <div class="card-body card-body-cascade text-center">
+                                        <h4 class="card-title"><strong>{{ album.name }}</strong></h4>
+                                        {% if album.author is not null %}<h5 class="blue-text pb-2"><a href='{{ path('user_profile_information.lang', global_path_params|merge({userId: album.author.userId})) }}'><strong>{{ album.author.lastName }} {{ album.author.firstName }}</strong></a></h5>{% endif %}
+                                        <p class="card-text">{{ album.createdAt|date("Y/m/d")|format_datetime('medium', 'none') }}</p>
+
+                                        <a class="px-2"><i class="fas fa-eye"></i> {{ album.view }}</a>
+                                        <a class="px-2"><i class="fas fa-comments"></i> {{ album.commentCount }}</a>
+                                        <a class="px-2"><i class="fas fa-images"></i> {{ album.pictureCount }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </section>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}

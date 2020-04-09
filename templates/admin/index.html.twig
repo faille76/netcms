@@ -1,0 +1,89 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{% trans %}admin.home.title{% endtrans %}{% endblock %}
+{% block admin_title %}{% trans %}admin.home.title{% endtrans %}{% endblock %}
+
+{% block admin_body %}
+    <div class="row">
+        <div class="col-lg-4 col-md-12 mb-4">
+            <div class="card mt-3">
+                <div class="">
+                    <i class="far fa-user fa-lg primary-color z-depth-2 p-4 ml-3 mt-n3 rounded text-white"></i>
+                    <div class="float-right text-right p-3">
+                        <p class="text-uppercase text-muted mb-1"><small>{% trans %}admin.home.users{% endtrans %}</small></p>
+                        <h4 class="font-weight-bold mb-0">{{ users_count|number_format }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if global.feature.ARTICLE and is_granted('ROLE_ARTICLES') %}
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card mt-3">
+                <div class="">
+                    <i class="fas fa-newspaper fa-lg teal z-depth-2 p-4 ml-3 mt-n3 rounded text-white"></i>
+                    <div class="float-right text-right p-3">
+                        <p class="text-uppercase text-muted mb-1"><small>{% trans %}admin.home.articles{% endtrans %}</small></p>
+                        <h4 class="font-weight-bold mb-0">{{ articles_count|number_format }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if global.feature.GALLERY and is_granted('ROLE_PICTURES') %}
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card mt-3">
+                <div class="">
+                    <i class="fas fa-folder-open fa-lg purple z-depth-2 p-4 ml-3 mt-n3 rounded text-white"></i>
+                    <div class="float-right text-right p-3">
+                        <p class="text-uppercase text-muted mb-1"><small>{% trans %}admin.home.albums{% endtrans %}</small></p>
+                        <h4 class="font-weight-bold mb-0">{{ albums_count|number_format }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card mt-3">
+                <div class="">
+                    <i class="fas fa-images fa-lg orange z-depth-2 p-4 ml-3 mt-n3 rounded text-white"></i>
+                    <div class="float-right text-right p-3">
+                        <p class="text-uppercase text-muted mb-1"><small>{% trans %}admin.home.pictures{% endtrans %}</small></p>
+                        <h4 class="font-weight-bold mb-0">{{ pictures_count|number_format }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if global.feature.PARTNER and is_granted('ROLE_PARTNERS') %}
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card mt-3">
+                <div class="">
+                    <i class="fas fa-globe fa-lg unique-color z-depth-2 p-4 ml-3 mt-n3 rounded text-white"></i>
+                    <div class="float-right text-right p-3">
+                        <p class="text-uppercase text-muted mb-1"><small>{% trans %}admin.home.partners{% endtrans %}</small></p>
+                        <h4 class="font-weight-bold mb-0">{{ partners_count|number_format }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if is_granted('ROLE_UPLOAD') %}
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card mt-3">
+                <div class="">
+                    <i class="fas fa-file fa-lg red z-depth-2 p-4 ml-3 mt-n3 rounded text-white"></i>
+                    <div class="float-right text-right p-3">
+                        <p class="text-uppercase text-muted mb-1"><small>{% trans %}admin.home.documents{% endtrans %}</small></p>
+                        <h4 class="font-weight-bold mb-0">{{ documents_count|number_format }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

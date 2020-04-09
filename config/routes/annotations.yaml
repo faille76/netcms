@@ -1,0 +1,10 @@
+controllers:
+    resource: ../../src
+    type: annotation
+    prefix:
+      default: ''
+      lang: /{_locale}
+    requirements:
+      _locale: '%app_locales%'
+    defaults:
+      _locale: '%locale%'

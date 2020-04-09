@@ -1,0 +1,6 @@
+parameters:
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    ignoreErrors:
+        - '#Method App\\[a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) has no return typehint specified#'
+        - '#Method App\\[a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) has parameter (\$message|\$parameters) with no typehint specified#'

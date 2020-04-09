@@ -1,0 +1,42 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{% trans %}admin.user.list.title{% endtrans %}{% endblock %}
+{% block admin_title %}{% trans %}admin.user.list.title{% endtrans %}{% endblock %}
+
+{% block admin_body %}
+    <div class="row d-flex justify-content-center">
+        {% for user in users %}
+        <div class="col-lg-2 col-md-3 col-sm-4 mb-4 wow fadeIn" data-wow-delay="0.3s">
+            <div class="p-3">
+                <div class="avatar w-100 white d-flex justify-content-center align-items-center">
+                    <a href='{{ path('user_profile_information.lang', global_path_params|merge({userId: user.id})) }}'>
+                        <img src="{% if user.avatar is not null %}{{ asset('avatars/300/' ~ user.avatar) }}{% else %}{{ asset('images/no_avatar.png') }}{% endif %}" class="img-fluid rounded-circle z-depth-1" alt="{{ user.lastName|upper }} {{ user.firstName|capitalize }}" />
+                    </a>
+                </div>
+                <div class="text-center mt-3">
+                    <h6 class="font-weight-bold pt-2">
+                        <a href='{{ path('user_profile_information.lang', global_path_params|merge({userId: user.id})) }}'>
+                            {{ user.lastName|upper }} {{ user.firstName|capitalize }}
+                        </a>
+                    </h6>
+                    <p class="text-muted">
+                        <small><i>
+                            <i class="fas fa-eye"></i> {{ user.updatedAt|date("Y/m/d")|format_datetime('short', 'none') }}</i><br />
+                            <a href='#'><span class="text-danger"><i class="fas fa-times"></i> {% trans %}admin.user.list.delete{% endtrans %}</span></a>
+                        </small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+
+
+    <section class="wow fadeIn" data-wow-delay="0.3s">
+        <div class="p-2">
+            {% import 'pagination.html.twig' as pagination %}
+            {{ pagination.pagination(page_number, page_cur, 'admin_user_page_list.lang', global_path_params) }}
+        </div>
+    </section>
+
+{% endblock %}

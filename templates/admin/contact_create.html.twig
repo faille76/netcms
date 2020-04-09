@@ -1,0 +1,59 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{% trans %}admin.contacts.create.title{% endtrans %} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+{% block admin_title %}{% trans %}admin.contacts.create.title{% endtrans %}{% endblock %}
+
+{% block admin_body %}
+    {% if succeed is defined %}
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{% trans %}admin.contacts.create.confirm.title{% endtrans %}</h5>
+                <p class="card-text text-white">
+                    {{ succeed|trans }}
+                </p>
+            </div>
+        </div>
+    {% else %}
+        {% if errors is defined %}
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{% trans %}admin.contacts.create.error.title{% endtrans %}</h5>
+                <p class="card-text text-white">
+                    <ul>
+                        {% for error in errors %}
+                            <li>{{ error|trans }}</li>
+                        {% endfor %}
+                    </ul>
+                </p>
+            </div>
+        </div>
+        {% endif %}
+
+        <form method="post" role='form'>
+            <div class="md-form form-lg">
+                <input type="text" id="first_name" name="first_name" class="form-control form-control-lg" {% if first_name is defined %}value="{{ first_name }}"{% endif %} />
+                <label for="first_name">{% trans %}admin.contacts.create.first_name{% endtrans %}</label>
+            </div>
+
+            <div class="md-form form-lg">
+                <input type="text" id="last_name" name="last_name" class="form-control form-control-lg" {% if last_name is defined %}value="{{ last_name }}"{% endif %} />
+                <label for="last_name">{% trans %}admin.contacts.create.last_name{% endtrans %}</label>
+            </div>
+
+            <div class="md-form form-lg">
+                <input type="text" id="role" name="role" class="form-control form-control-lg" {% if role is defined %}value="{{ role }}"{% endif %} />
+                <label for="role">{% trans %}admin.contacts.create.role{% endtrans %}</label>
+            </div>
+
+            <div class="md-form form-lg">
+                <input type="email" id="email" name="email" class="form-control form-control-lg" {% if email is defined %}value="{{ email }}"{% endif %} />
+                <label for="email">{% trans %}admin.contacts.create.email{% endtrans %}</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">{% trans %}admin.contacts.create.submit{% endtrans %}</button>
+        </form>
+    {% endif %}
+    <p class="text-right">
+        <a href="{{ path('admin_contact_list.lang', global_path_params) }}" class="btn btn-primary"><i class="fas fa-arrow-left"></i> {% trans %}admin.contacts.create.back{% endtrans %}</a>
+    </p>
+{% endblock %}

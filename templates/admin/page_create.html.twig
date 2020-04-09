@@ -1,0 +1,75 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{% trans %}admin.page.create.title{% endtrans %} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+{% block admin_title %}{% trans %}admin.page.create.title{% endtrans %}{% endblock %}
+
+{% block admin_body %}
+    {% if succeed is defined %}
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{% trans %}admin.page.create.confirm.title{% endtrans %}</h5>
+                <p class="card-text text-white">
+                    {{ succeed|trans }}
+                </p>
+            </div>
+        </div>
+    {% else %}
+        {% if errors is defined %}
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{% trans %}admin.page.create.error.title{% endtrans %}</h5>
+                <p class="card-text text-white">
+                    <ul>
+                        {% for error in errors %}
+                            <li>{{ error|trans }}</li>
+                        {% endfor %}
+                    </ul>
+                </p>
+            </div>
+        </div>
+        {% endif %}
+
+        <form method="post" role='form'>
+            {% trans %}admin.page.create.parent{% endtrans %}
+            <select class="browser-default custom-select" name="parent_id">
+                <option value="0" disabled>{% trans %}admin.page.create.parent{% endtrans %}</option>
+                <option value="0">{% trans %}admin.page.create.no_parent{% endtrans %}</option>
+                {% for page_item in page_tree %}
+                    <option value="{{ page_item.id }}" {% if parent_id is defined and page_item.id == parent_id %}selected{% endif %}>{{ page_item.name }}</option>
+                {% endfor %}
+            </select>
+            <br />
+            <div class="md-form form-lg">
+                <input type="text" id="name_fr" name="name_fr" class="form-control form-control-lg" {% if name_fr is defined %}value="{{ name_fr }}"{% endif %} />
+                <label for="name_fr">{% trans %}admin.page.create.name_fr{% endtrans %}</label>
+            </div>
+            <br />
+            <div class="md-form form-lg">
+                <input type="text" id="name_en" name="name_en" class="form-control form-control-lg" {% if name_en is defined %}value="{{ name_en }}"{% endif %} />
+                <label for="name_en">{% trans %}admin.page.create.name_en{% endtrans %}</label>
+            </div>
+            <br />
+            {% trans %}admin.page.create.content_fr{% endtrans %}
+            <div class="md-form">
+                <textarea class="form-control editor_fr" name="content_fr" rows="8" cols="30" id="content_fr">
+                    {% if content_fr is defined %}{% autoescape false %}{{ content_fr }}{% endautoescape %}{% endif %}
+                </textarea>
+            </div>
+            <br />
+            {% trans %}admin.page.create.content_en{% endtrans %}
+            <div class="md-form">
+                <textarea class="form-control editor_en" name="content_en" rows="8" cols="30" id="content_en">
+                    {% if content_en is defined %}{% autoescape false %}{{ content_en }}{% endautoescape %}{% endif %}
+                </textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">{% trans %}admin.page.create.submit{% endtrans %}</button>
+        </form>
+
+        <script src="{{ asset('library/ckeditor5/build/ckeditor.js') }}"></script>
+        <script src="{{ asset('library/ckeditor5/build/custom.js') }}"></script>
+    {% endif %}
+    <p class="text-right">
+        <a href="{{ path('admin_page_list.lang', global_path_params) }}" class="btn btn-primary"><i class="fas fa-arrow-left"></i> {% trans %}admin.page.create.back{% endtrans %}</a>
+    </p>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+
+{% block og_title %}{{ title }} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+{% block og_description %}{{ text|striptags|slice(0, 256) }}{% endblock %}
+{% block og_type %}website{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('home.lang', global_path_params) }}" >{{ global.config.APP_NAME }}</a></li>
+                {% for page in sitemap %}
+                    <li class="breadcrumb-item"><a href="{{ path('page_by_slug.lang', global_path_params|merge({pageName: page.slug})) }}">{{ page.name }}</a></li>
+                {% endfor %}
+                <li class='breadcrumb-item active'>{{ title }}</li>
+            </ol>
+        </nav>
+
+        <section class="mb-4 wow fadeIn" data-wow-delay="0.3s">
+            <h1>{{ title }}</h1>
+
+            {% if text is empty or text is null %}
+                {% trans %}pages.no_content{% endtrans %}
+            {% else %}
+                {% autoescape false %}{{ text }}{% endautoescape %}
+            {% endif %}
+        </section>
+
+        {% if images|length > 0 %}
+            <section class="mb-4 wow fadeIn" data-wow-delay="0.3s">
+                {% for image in images %}
+                    <a href="{{ asset('pages/' ~ slug ~ '/' ~ '1920/' ~ image.url) }}" data-lightbox="roadtrip">
+                        <img alt="{{ image.name }}" src="{{ asset('pages/' ~ slug ~ '/' ~ '250/' ~ image.url) }}" class="img-fluid" />
+                    </a>
+                {% endfor %}
+            </section>
+        {% endif %}
+
+        {% if sub_page|length > 0 %}
+            <section class="mb-4 wow fadeIn" data-wow-delay="0.3s">
+                <h2>{% trans %}pages.sub_pages{% endtrans %}</h2>
+                <div class="btn-group" role="group" aria-label="Categories">
+                    {% for value in sub_page %}
+                        <a href='{{ value.link }}' class="btn btn-primary">{{ value.name }}</a>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+    </div>
+{% endblock %}

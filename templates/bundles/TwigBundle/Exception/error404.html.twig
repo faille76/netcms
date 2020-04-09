@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}error.404.title{% endtrans %} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{% trans %}error.404.title{% endtrans %}</h5>
+                <p class="card-text text-white">
+                    {% trans %}error.404.message{% endtrans %}
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

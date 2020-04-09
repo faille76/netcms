@@ -1,0 +1,71 @@
+version: '3.7'
+
+services:
+  # DB
+  mysql-db:
+    image: mysql:5.7
+    restart: always
+    command: ["--default-authentication-plugin=mysql_native_password"]
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: symfony
+      MYSQL_USER: symfony
+      MYSQL_PASSWORD: symfony
+    volumes:
+      - filesys-mysql-db:/var/lib/mysql
+    networks:
+      - db
+
+  # Websites
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: mysql-db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    depends_on:
+      - mysql-db
+    networks:
+      - db
+      - web
+
+  # Nginx
+  nginx:
+    build: ./docker/nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./public:/var/www/symfony/public:cached
+    networks:
+      - web
+    depends_on:
+      - phpmyadmin
+      - php
+
+  php:
+    build: ./docker/fpm
+    ports:
+      - "9000:9000"
+    environment:
+      TZ: "Europe/Paris"
+    volumes:
+      - ./:/var/www/symfony:cached
+      - appdata:/var/www/symfony/var
+      - ./vendor:/var/www/symfony/vendor:delegated
+    depends_on:
+      - mysql-db
+    networks:
+      - db
+      - web
+
+volumes:
+  filesys-mysql-db:
+    driver: local
+  appdata: ~
+
+networks:
+  db:
+  web:

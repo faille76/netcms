@@ -1,0 +1,42 @@
+{% macro pagination(total, current, url, global_path_params, nearbyPagesLimit = 4) %}
+    {% apply spaceless %}
+        {% if total > 1 %}
+            <nav aria-label='Navigation'>
+                <ul class='pagination pagination-circle pg-blue'>
+                    {% if current > 1 %}
+                        <li class='page-item'><a class="page-link" href="{{ path(url, global_path_params|merge({pageNumber: (current - 1)})) }}">&laquo;</a></li>
+                    {% endif %}
+
+                    {% for i in 1..total %}
+                        {% if 0 == (current - nearbyPagesLimit) - loop.index %}
+                            <li class='page-item'><a class="page-link" href="{{ path(url, global_path_params|merge({pageNumber: 1})) }}">1</a></li>
+                            {% if 1 != loop.index %}
+                                <li class='page-item disabled'><a href="#" class="page-link">...</a></li>
+                            {% endif %}
+                        {% elseif 0 == (current + nearbyPagesLimit) - loop.index  and (current + nearbyPagesLimit) < total %}
+                            <li class='page-item disabled'><a href="#" class="page-link">...</a></li>
+                        {% elseif 0 < (current - nearbyPagesLimit) - loop.index %}
+                        {% elseif 0 > (current + nearbyPagesLimit) - loop.index %}
+                        {% else %}
+                            {% if current == loop.index  %}
+                                <li class="page-item active"><a href="#" class="page-link">{{ loop.index }}</a></li>
+                            {% else %}
+                                {% if loop.index == 1 %}
+                                    <li class='page-item'><a class="page-link" href="{{ path(url, global_path_params|merge({pageNumber: 1})) }}">{{ loop.index }}</a></li>
+                                {% else %}
+                                    <li class='page-item'><a class="page-link" href="{{ path(url, global_path_params|merge({pageNumber: loop.index})) }}">{{ loop.index }}</a></li>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if current != total  and (current + nearbyPagesLimit) < total %}
+                        <li class='page-item'><a class="page-link" href="{{ path(url, global_path_params|merge({pageNumber: total})) }}">{{ total }}</a></li>
+                    {% endif %}
+                    {% if current < total %}
+                        <li class='page-item'><a class="page-link" href="{{ path(url, global_path_params|merge({pageNumber: (current + 1)})) }}">&raquo;</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% endapply %}
+{% endmacro %}

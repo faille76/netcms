@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}search.title{% endtrans %} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+
+{% block og_title %}{% trans %}search.title{% endtrans %} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <section class="wow fadeIn" data-wow-delay="0.3s">
+            <h1>{% trans %}search.title{% endtrans %}</h1>
+            <form class="form-inline md-form form-sm mt-0" method="post" action="{{ path('search_post.lang', global_path_params) }}">
+                <i class="fas fa-search" aria-hidden="true"></i>
+                <input class="form-control form-control-sm ml-3 w-75" type="text" placeholder="{% trans %}search.keys{% endtrans %}" name="keys" aria-label="{% trans %}search.keys{% endtrans %}"{% if keys is defined and keys is not null %}value="{{ keys }}"{% endif %} />
+            </form>
+        </section>
+
+        {% if state is defined and state == false %}
+            {% trans %}search.error_keys{% endtrans %}
+        {% endif %}
+
+        {% if state is not defined %}
+        <section class="mb-4 wow fadeIn" data-wow-delay="0.3s">
+            <h3>{% trans %}search.pages{% endtrans %}</h3>
+            {% if pages|length > 0 %}
+            <ul>
+                {% for value in pages %}
+                    <li><a href='{{ path('page_by_slug.lang', global_path_params|merge({pageName: value.slug})) }}'>{{ value.title }}</a></li>
+                {% endfor %}
+            </ul>
+            {% else %}
+                {% trans %}search.no_pages{% endtrans %}
+            {% endif %}
+        </section>
+
+        <section class="mb-4 wow fadeIn" data-wow-delay="0.3s">
+            <h3>{% trans %}search.articles{% endtrans %}</h3>
+            {% if articles|length > 0 %}
+            <ul>
+                {% for value in articles %}
+                    <li><a href='{{ path('article_by_slug.lang', global_path_params|merge({slug: value.slug})) }}'>{{ value.name }}</a> - {{ value.createdAt|date("Y/m/d")|format_datetime('medium', 'none') }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+                {% trans %}search.no_articles{% endtrans %}
+            {% endif %}
+        </section>
+
+        <section class="mb-4 wow fadeIn" data-wow-delay="0.3s">
+            <h3>{% trans %}search.documents{% endtrans %}</h3>
+            {% if documents|length > 0 %}
+            <ul>
+                {% for value in documents %}
+                    <li><a href='{{ asset('Upload/' ~ value.filename) }}'>{{ value.name }}</a></li>
+                {% endfor %}
+            </ul>
+            {% else %}
+                {% trans %}search.no_documents{% endtrans %}
+            {% endif %}
+        </section>
+
+        <section class="mb-4 wow fadeIn" data-wow-delay="0.3s">
+            <h3>{% trans %}search.albums{% endtrans %}</h3>
+            {% if albums|length > 0 %}
+            <ul>
+                {% for value in albums %}
+                    <li><a href='{{ path('gallery_album_by_slug.lang', global_path_params|merge({slug: value.slug})) }}'>{{ value.name }}</a> - {{ value.createdAt|date("Y/m/d")|format_datetime('medium', 'none') }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+                {% trans %}search.no_albums{% endtrans %}
+            {% endif %}
+        </section>
+        {% endif %}
+    </div>
+{% endblock %}

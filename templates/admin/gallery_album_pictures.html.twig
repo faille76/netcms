@@ -1,0 +1,81 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ album.name }} &bullet; {{ global.config.APP_NAME }}{% endblock %}
+{% block admin_title %}{{ album.name }}{% endblock %}
+
+{% block admin_body %}
+    <h2>{% trans %}admin.gallery.album.pictures.add{% endtrans %}</h2>
+    {% if succeed is defined %}
+    <div class="card text-white bg-success mb-3">
+        <div class="card-body">
+            <h5 class="card-title">{% trans %}admin.gallery.album.pictures.post.confirm{% endtrans %}</h5>
+            <p class="card-text text-white">
+                {{ succeed|trans }}
+            </p>
+        </div>
+    </div>
+    {% elseif errors is defined %}
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{% trans %}admin.gallery.album.pictures.post.error.title{% endtrans %}</h5>
+                <p class="card-text text-white">
+                <ul>
+                    {% for error in errors %}
+                        <li>{{ error|trans }}</li>
+                    {% endfor %}
+                </ul>
+                </p>
+            </div>
+        </div>
+    {% endif %}
+
+    <form role="form" method="post" class="md-form" enctype="multipart/form-data">
+        <div class="file-field">
+            <div class="btn blue-gradient btn-sm float-left">
+                <span><i class="fas fa-cloud-upload-alt mr-2" aria-hidden="true"></i>{% trans %}admin.gallery.album.pictures.choose{% endtrans %}</span>
+                <input type="file" name="pictures[]" multiple />
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text" placeholder="{% trans %}admin.gallery.album.pictures.upload_text{% endtrans %}" />
+            </div>
+        </div>
+
+        <br />
+
+        <button type="submit" class="btn btn-primary btn-md">{% trans %}admin.gallery.album.pictures.submit{% endtrans %}</button>
+    </form>
+
+    <h2 class="mt-4">{% trans %}admin.gallery.album.pictures.list{% endtrans %}</h2>
+    {% if pictures|length == 0 %}
+        {% trans %}admin.gallery.album.pictures.no_image{% endtrans %}
+    {% else %}
+        <div class="row">
+        {% for picture in pictures %}
+            <div class="col-lg-2 col-md-3 col-sm-12 mb-4">
+                <div class="modal fade" id="modal{{ picture.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body mb-0 p-0 mx-auto">
+                                <img src="{{ asset(album.relativePath ~ '/900/'  ~ picture.url) }}" alt="{{ picture.name }}" />
+                            </div>
+
+                            <div class="modal-footer justify-content-center">
+                                {% if album.pictureCover is null or album.pictureCover.id != picture.id %}
+                                    <a href="{{ path('admin_gallery_album_pictures_default.lang', global_path_params|merge({albumId: album.id, pictureId: picture.id})) }}" class="btn btn-info btn-rounded btn-md ml-4"><i class="fas fa-check-circle"></i> {% trans %}admin.gallery.album.pictures.default{% endtrans %}</a>
+                                {% endif %}
+
+                                <a href="{{ path('admin_gallery_album_pictures_delete.lang', global_path_params|merge({albumId: album.id, pictureId: picture.id})) }}" class="btn btn-danger btn-rounded btn-md ml-4"><i class="fas fa-times"></i> {% trans %}admin.gallery.album.pictures.delete{% endtrans %}</a>
+
+                                <button type="button" class="btn btn-outline-primary btn-rounded btn-md ml-4" data-dismiss="modal">{% trans %}admin.gallery.album.pictures.close{% endtrans %}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a>
+                    <img class="img-fluid z-depth-1 {% if album.pictureCover is not null and album.pictureCover.id == picture.id %}img-thumbnail{% endif %}" src="{{ asset(album.relativePath ~ '/250/'  ~ picture.url) }}" alt="{{ picture.name }}" data-toggle="modal" data-target="#modal{{ picture.id }}">
+                </a>
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
